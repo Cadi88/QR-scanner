@@ -1,0 +1,32 @@
+{
+  "name": "qr-access",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "lint": "eslint .",
+    "typecheck": "turbo run typecheck",
+    "boundaries": "depcruise --config .dependency-cruiser.cjs packages",
+    "test": "vitest run",
+    "test:db": "supabase test db",
+    "gen:types": "supabase gen types typescript --local > database.types.ts",
+    "gen:golden": "tsx packages/rules/scripts/gen-golden.ts",
+    "supabase": "supabase"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.2",
+    "dependency-cruiser": "^16.9.0",
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2",
+    "supabase": "^2.116.0",
+    "tsx": "^4.19.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1",
+    "vitest": "^2.1.8"
+  }
+}

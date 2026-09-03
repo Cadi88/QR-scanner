@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm boundaries
+
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # gen:golden must be deterministic — fail on drift (R-12-02).
+      - run: pnpm gen:golden
+      - run: git diff --exit-code -- packages/rules/generated supabase/tests/generated
+      - run: pnpm test
+
+  db:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm supabase start
+      - run: pnpm supabase db reset
+      # pgTAP: golden cases, RLS isolation, SECURITY DEFINER search_path guard.
+      - run: pnpm supabase test db
+      - if: always()
+        run: pnpm supabase stop
+
+  bundle-budget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # size-limit gate on the /puerta route chunk — wired in F2-01 (§1.2).
+      - run: echo "bundle-budget: no bundle yet (Phase 2)."
+
+  e2e:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Playwright against the PWA — wired in Phase 2.
+      - run: echo "e2e: no app yet (Phase 2)."
+
+  no-deploy-on-event-day:
+    # R-12-07 — before any prod migration, refuse if an event opens within 24h.
+    # Real query needs the events table (F1-01); stub for now.
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "no-deploy-on-event-day: stub until F1-01."

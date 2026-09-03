@@ -1,0 +1,8 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# R-11-06: dependency build scripts are blocked by default. Allowlist only what
+# needs a native binary, and never anything in the validator (gate) tree.
+allowBuilds:
+  esbuild: true

@@ -1,0 +1,12 @@
+# E10 harness — Toxiproxy in front of Postgres and the sync endpoint so tests
+# can inject latency and partitions. Scenarios land in F2-06. Skeleton only.
+services:
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy:2.11.0
+    ports:
+      - "8474:8474" # control API
+      - "55432:55432" # -> postgres (host.docker.internal:54322)
+      - "58080:58080" # -> sync endpoint
+    command: ["-host", "0.0.0.0"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
