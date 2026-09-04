@@ -73,7 +73,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # size-limit gate on the /puerta route chunk — wired in F2-01 (§1.2).
-      - run: echo "bundle-budget: no bundle yet (Phase 2)."
+      - run: 'echo "bundle-budget: no bundle yet (Phase 2)."'
 
   e2e:
     if: github.event_name == 'pull_request'
@@ -81,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # Playwright against the PWA — wired in Phase 2.
-      - run: echo "e2e: no app yet (Phase 2)."
+      - run: 'echo "e2e: no app yet (Phase 2)."'
 
   no-deploy-on-event-day:
     # R-12-07 — before any prod migration, refuse if an event opens within 24h.
@@ -89,4 +89,4 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - run: echo "no-deploy-on-event-day: stub until F1-01."
+      - run: 'echo "no-deploy-on-event-day: stub until F1-01."'
