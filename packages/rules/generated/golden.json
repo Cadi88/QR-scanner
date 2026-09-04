@@ -1,4 +1,215 @@
 {
   "version": 1,
-  "cases": []
+  "cases": [
+    {
+      "id": "client-malformed",
+      "inputs": {
+        "wellFormed": false
+      },
+      "expect": "malformed",
+      "applies": [
+        "client"
+      ],
+      "precedence": 1
+    },
+    {
+      "id": "client-wrong-event",
+      "inputs": {
+        "sameEvent": false
+      },
+      "expect": "wrong_event",
+      "applies": [
+        "client"
+      ],
+      "precedence": 2
+    },
+    {
+      "id": "client-unknown-code",
+      "inputs": {
+        "ticketExists": false
+      },
+      "expect": "unknown_code",
+      "applies": [
+        "client"
+      ],
+      "precedence": 3
+    },
+    {
+      "id": "client-stale-epoch",
+      "inputs": {
+        "epochMatch": false
+      },
+      "expect": "stale_epoch",
+      "applies": [
+        "client"
+      ],
+      "precedence": 4
+    },
+    {
+      "id": "client-invalid-signature",
+      "inputs": {
+        "signatureValid": false
+      },
+      "expect": "invalid_signature",
+      "applies": [
+        "client"
+      ],
+      "precedence": 5
+    },
+    {
+      "id": "db-out-of-window",
+      "inputs": {
+        "withinWindow": false
+      },
+      "expect": "out_of_window",
+      "applies": [
+        "db"
+      ],
+      "precedence": 0
+    },
+    {
+      "id": "db-admitted",
+      "inputs": {
+        "ticketExists": true,
+        "sameEvent": true,
+        "epochMatch": true,
+        "status": "valid",
+        "usesRemaining": true
+      },
+      "expect": "admitted",
+      "applies": [
+        "db"
+      ],
+      "precedence": 5
+    },
+    {
+      "id": "db-unknown-code",
+      "inputs": {
+        "ticketExists": false
+      },
+      "expect": "unknown_code",
+      "applies": [
+        "db"
+      ],
+      "precedence": 10
+    },
+    {
+      "id": "db-wrong-event",
+      "inputs": {
+        "ticketExists": true,
+        "sameEvent": false
+      },
+      "expect": "wrong_event",
+      "applies": [
+        "db"
+      ],
+      "precedence": 11
+    },
+    {
+      "id": "db-stale-epoch",
+      "inputs": {
+        "ticketExists": true,
+        "sameEvent": true,
+        "epochMatch": false
+      },
+      "expect": "stale_epoch",
+      "applies": [
+        "db"
+      ],
+      "precedence": 12
+    },
+    {
+      "id": "db-revoked-void",
+      "inputs": {
+        "status": "void"
+      },
+      "expect": "revoked",
+      "applies": [
+        "db"
+      ],
+      "precedence": 13
+    },
+    {
+      "id": "db-revoked-refunded",
+      "inputs": {
+        "status": "refunded"
+      },
+      "expect": "revoked",
+      "applies": [
+        "db"
+      ],
+      "precedence": 13
+    },
+    {
+      "id": "db-revoked-blocked",
+      "inputs": {
+        "status": "blocked"
+      },
+      "expect": "revoked",
+      "applies": [
+        "db"
+      ],
+      "precedence": 13
+    },
+    {
+      "id": "db-uses-exhausted-valid",
+      "inputs": {
+        "status": "valid",
+        "usesRemaining": false
+      },
+      "expect": "uses_exhausted",
+      "applies": [
+        "db"
+      ],
+      "precedence": 14
+    },
+    {
+      "id": "db-uses-exhausted-used",
+      "inputs": {
+        "status": "used",
+        "usesRemaining": false
+      },
+      "expect": "uses_exhausted",
+      "applies": [
+        "db"
+      ],
+      "precedence": 14
+    },
+    {
+      "id": "db-uses-exhausted-transferred",
+      "inputs": {
+        "status": "transferred",
+        "usesRemaining": false
+      },
+      "expect": "uses_exhausted",
+      "applies": [
+        "db"
+      ],
+      "precedence": 14
+    },
+    {
+      "id": "db-already-used-used",
+      "inputs": {
+        "status": "used",
+        "usesRemaining": true
+      },
+      "expect": "already_used",
+      "applies": [
+        "db"
+      ],
+      "precedence": 15
+    },
+    {
+      "id": "db-already-used-transferred",
+      "inputs": {
+        "status": "transferred",
+        "usesRemaining": true
+      },
+      "expect": "already_used",
+      "applies": [
+        "db"
+      ],
+      "precedence": 15
+    }
+  ]
 }

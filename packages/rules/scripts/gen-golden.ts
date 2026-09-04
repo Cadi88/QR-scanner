@@ -8,9 +8,12 @@
  * Deterministic: CI runs this and fails if `git diff` is non-empty, so the
  * table and the fixtures cannot drift.
  *
- * BLOCKED (F0-05): with `ROWS` empty this writes empty (but well-formed)
- * artifacts. Once §8 is transcribed it expands the cartesian product of the
- * relevant inputs per row.
+ * One case per row today (each row's `when` as-is). TODO(F0-05 follow-up):
+ * expand each row over the cartesian product of the inputs it does not pin,
+ * using `evaluate()` itself as ground truth for the unpinned combinations,
+ * to reach the plan's "≥60 golden cases" close criterion. The pgTAP side
+ * additionally needs real ticket/device fixtures per case, which depends on
+ * the schema landing in F1-01.
  */
 
 import { mkdirSync, writeFileSync } from 'node:fs';
